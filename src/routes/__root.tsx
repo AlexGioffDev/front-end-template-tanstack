@@ -5,6 +5,7 @@ import {
 } from '@tanstack/react-router'
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
+import TanstackQueryProvider from '#/integrations/tanstack-query/root-provider'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -23,12 +24,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+
+  const context = Route.useRouteContext();
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body>{children}<Scripts /></body>
+      <body>
+        <TanstackQueryProvider queryClient={context.queryClient}>
+          {children}
+        </TanstackQueryProvider>
+        <Scripts /></body>
     </html>
   )
 }
